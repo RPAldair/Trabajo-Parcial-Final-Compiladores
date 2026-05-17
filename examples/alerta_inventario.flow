@@ -1,0 +1,10 @@
+// Workflow  de inventario y alerta al proveedor si hay stock bajo
+workflow alerta_inventario {
+    start -> consultar_inventario
+    consultar_inventario -> enviar_alerta_proveedor if stock_bajo
+    consultar_inventario -> registrar_ok if not stock_bajo
+    enviar_alerta_proveedor -> crear_orden_compra
+    crear_orden_compra -> notificar_admin
+    notificar_admin -> end
+    registrar_ok -> end
+}

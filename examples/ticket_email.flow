@@ -1,0 +1,12 @@
+// workflow  de un email entrante se convierte en ticket y se asigna segun prioridad
+workflow ticket_email {
+    start -> leer_email
+    leer_email -> clasificar_prioridad if email_soporte
+    leer_email -> ignorar if not email_soporte
+    clasificar_prioridad -> asignar_agente_senior if prioridad_alta
+    clasificar_prioridad -> asignar_agente_junior if not prioridad_alta
+    asignar_agente_senior -> notificar_cliente
+    asignar_agente_junior -> notificar_cliente
+    notificar_cliente -> end
+    ignorar -> end
+}

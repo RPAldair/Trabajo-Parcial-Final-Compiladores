@@ -1,0 +1,12 @@
+// Workflow de registro de un empleado nuevo, se crean sus accesos y se le notifica
+workflow onboarding_empleado {
+    start -> recibir_solicitud
+    recibir_solicitud -> verificar_datos if datos_validos
+    recibir_solicitud -> notificar_error if not datos_validos
+    verificar_datos -> crear_cuenta_sistema
+    crear_cuenta_sistema -> asignar_permisos
+    asignar_permisos -> enviar_credenciales
+    enviar_credenciales -> notificar_jefe_area
+    notificar_jefe_area -> end
+    notificar_error -> end
+}
