@@ -1,5 +1,6 @@
 // Workflow  de inventario y alerta al proveedor si hay stock bajo
 workflow alerta_inventario {
+    var stock_bajo : bool
     start -> consultar_inventario
     consultar_inventario -> enviar_alerta_proveedor if stock_bajo
     consultar_inventario -> registrar_ok if not stock_bajo

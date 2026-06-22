@@ -34,5 +34,45 @@ class FlowLangVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by FlowLangParser#varDecl.
+    def visitVarDecl(self, ctx:FlowLangParser.VarDeclContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FlowLangParser#dataType.
+    def visitDataType(self, ctx:FlowLangParser.DataTypeContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FlowLangParser#expr.
+    def visitExpr(self, ctx:FlowLangParser.ExprContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FlowLangParser#orExpr.
+    def visitOrExpr(self, ctx:FlowLangParser.OrExprContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FlowLangParser#andExpr.
+    def visitAndExpr(self, ctx:FlowLangParser.AndExprContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FlowLangParser#notExpr.
+    def visitNotExpr(self, ctx:FlowLangParser.NotExprContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FlowLangParser#comparison.
+    def visitComparison(self, ctx:FlowLangParser.ComparisonContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FlowLangParser#primary.
+    def visitPrimary(self, ctx:FlowLangParser.PrimaryContext):
+        return self.visitChildren(ctx)
+
+
 
 del FlowLangParser

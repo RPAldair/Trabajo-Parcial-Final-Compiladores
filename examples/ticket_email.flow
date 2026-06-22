@@ -1,5 +1,7 @@
 // workflow  de un email entrante se convierte en ticket y se asigna segun prioridad
 workflow ticket_email {
+    var email_soporte : bool
+    var prioridad_alta : bool
     start -> leer_email
     leer_email -> clasificar_prioridad if email_soporte
     leer_email -> ignorar if not email_soporte
