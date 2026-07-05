@@ -1,0 +1,10 @@
+// Workflow de proceso de compra
+workflow compra {
+    var stock_ok : bool
+    start -> validar
+    validar -> procesar_pago if stock_ok
+    validar -> cancelar if not stock_ok
+    procesar_pago -> enviar_email
+    cancelar -> end
+    enviar_email -> end
+}

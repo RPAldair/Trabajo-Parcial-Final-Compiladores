@@ -48,7 +48,3 @@ FALSE       : 'false' ;
 ID          : [a-zA-Z_][a-zA-Z0-9_]* ;
 WS          : [ \t\r\n]+ -> skip ;
 COMMENT     : '//' ~[\r\n]* -> skip ;
-
-
-
-

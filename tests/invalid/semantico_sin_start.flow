@@ -1,0 +1,4 @@
+// EXPECT: E301
+workflow demo {
+    validar -> end
+}

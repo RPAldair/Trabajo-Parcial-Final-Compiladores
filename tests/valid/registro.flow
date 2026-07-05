@@ -1,0 +1,10 @@
+// Workflow de autenticacion de usuario
+workflow registro{
+    var email_disponible : bool
+    start -> validar_email
+    validar_email -> crear_cuenta if email_disponible
+    validar_email -> mostrar_error if not email_disponible
+    crear_cuenta -> enviar_confirmacion
+    mostrar_error -> end
+    enviar_confirmacion -> end
+}

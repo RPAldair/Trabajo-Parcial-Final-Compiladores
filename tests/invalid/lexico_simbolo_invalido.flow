@@ -1,0 +1,5 @@
+// EXPECT: E101
+workflow demo {
+    start -> paso@uno
+    paso -> end
+}

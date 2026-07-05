@@ -1,0 +1,13 @@
+// Cubre guardias con int, string, parentesis, or y transicion por defecto
+workflow evaluacion_credito {
+    var edad : int
+    var pais : string
+    var aprobado_manual : bool
+    start -> revisar
+    revisar -> aprobar if (edad == 18 and pais == "PE") or aprobado_manual
+    revisar -> rechazar if not aprobado_manual
+    revisar -> aprobar
+    aprobar -> notificar
+    rechazar -> notificar
+    notificar -> end
+}

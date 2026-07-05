@@ -1,0 +1,13 @@
+// Workflow de un post creado pasa por revision antes de publicarse en redes
+workflow publicar_contenido {
+    var borrador_listo : bool
+    var contenido_aprobado : bool
+    start -> recibir_borrador
+    recibir_borrador -> revisar_contenido if borrador_listo
+    recibir_borrador -> end if not borrador_listo
+    revisar_contenido -> publicar_redes if contenido_aprobado
+    revisar_contenido -> solicitar_cambios if not contenido_aprobado
+    publicar_redes -> notificar_equipo
+    solicitar_cambios -> end
+    notificar_equipo -> end
+}

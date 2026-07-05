@@ -1,0 +1,9 @@
+// Workflow de autenticacion de usuario
+workflow autenticacion {
+    var credenciales_validas : bool
+    start -> verificar_credenciales
+    verificar_credenciales -> acceso_concedido if credenciales_validas
+    verificar_credenciales -> bloquear_cuenta if not credenciales_validas
+    acceso_concedido -> end
+    bloquear_cuenta -> end
+}

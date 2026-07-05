@@ -1,0 +1,6 @@
+// EXPECT: E306
+workflow demo {
+    var edad : int
+    start -> validar
+    validar -> end if edad
+}

@@ -1,31 +1,68 @@
-# Expr AST and small recursive-descent parser for conditions
-import re
+# exprs.py
+# AST de expresiones de FlowLang.
+#
+# Las condiciones de guardia de las transiciones se representan como un arbol
+# de expresiones tipado (no como texto). Cada nodo sabe:
+#   - imprimirse           (__str__)          -> para diagnosticos legibles
+#   - serializarse a JSON  (to_json)          -> backend de automatizacion
+#   - recolectar variables (collect_vars)     -> analisis semantico
+#   - inferir su tipo      (infer_type)       -> verificacion de tipos
+
 
 class Expr:
-    pass
+    """Nodo base del AST de expresiones."""
+
+    def to_json(self):
+        raise NotImplementedError
+
+    def __repr__(self):
+        return f"<{type(self).__name__} {self}>"
+
 
 class VariableExpr(Expr):
+    """Referencia a una variable declarada con `var`."""
+
     def __init__(self, name):
         self.name = name
 
     def __str__(self):
         return self.name
 
+    def to_json(self):
+        return {"op": "var", "name": self.name}
+
+
 class LiteralExpr(Expr):
+    """Literal: true/false, entero o cadena."""
+
     def __init__(self, value, type_):
         self.value = value
-        self.type = type_
+        self.type = type_  # 'bool' | 'int' | 'string'
 
     def __str__(self):
-        return repr(self.value)
+        if self.type == "bool":
+            return "true" if self.value else "false"
+        if self.type == "string":
+            return f'"{self.value}"'
+        return str(self.value)
+
+    def to_json(self):
+        return {"op": "lit", "type": self.type, "value": self.value}
+
 
 class EqualExpr(Expr):
+    """Comparacion de igualdad: `a == b`."""
+
     def __init__(self, left, right):
         self.left = left
         self.right = right
 
     def __str__(self):
         return f"({self.left} == {self.right})"
+
+    def to_json(self):
+        return {"op": "eq", "left": self.left.to_json(), "right": self.right.to_json()}
+
 
 class AndExpr(Expr):
     def __init__(self, left, right):
@@ -35,6 +72,10 @@ class AndExpr(Expr):
     def __str__(self):
         return f"({self.left} and {self.right})"
 
+    def to_json(self):
+        return {"op": "and", "left": self.left.to_json(), "right": self.right.to_json()}
+
+
 class OrExpr(Expr):
     def __init__(self, left, right):
         self.left = left
@@ -43,6 +84,10 @@ class OrExpr(Expr):
     def __str__(self):
         return f"({self.left} or {self.right})"
 
+    def to_json(self):
+        return {"op": "or", "left": self.left.to_json(), "right": self.right.to_json()}
+
+
 class NotExpr(Expr):
     def __init__(self, expr):
         self.expr = expr
@@ -50,124 +95,20 @@ class NotExpr(Expr):
     def __str__(self):
         return f"(not {self.expr})"
 
-# Tokenizer
-_TOKEN_RE = re.compile(r"\s*(=>|==|and\b|or\b|not\b|\(|\)|\d+|true\b|false\b|\"(\\\"|[^\"])*\"|[a-zA-Z_][a-zA-Z0-9_]*)", re.IGNORECASE)
-
-class ParseError(Exception):
-    pass
-
-class _Tokenizer:
-    def __init__(self, text):
-        self.tokens = [m.group(1) for m in _TOKEN_RE.finditer(text)]
-        self.pos = 0
-
-    def peek(self):
-        if self.pos < len(self.tokens):
-            return self.tokens[self.pos]
-        return None
-
-    def next(self):
-        t = self.peek()
-        self.pos += 1
-        return t
-
-# Grammar:
-# expr  : or_expr
-# or_expr : and_expr ( 'or' and_expr )*
-# and_expr: not_expr ( 'and' not_expr )*
-# not_expr: 'not' not_expr | comparison
-# comparison: primary ( '==' primary )?
-# primary: ID | NUMBER | STRING | TRUE | FALSE | '(' expr ')'
+    def to_json(self):
+        return {"op": "not", "expr": self.expr.to_json()}
 
 
-def parse_condition(text):
-    tok = _Tokenizer(text)
-    expr = _parse_or(tok)
-    if tok.peek() is not None:
-        raise ParseError(f"Unexpected token {tok.peek()}")
-    return expr
-
-
-def _parse_or(tok):
-    left = _parse_and(tok)
-    while True:
-        if tok.peek() and tok.peek().lower() == 'or':
-            tok.next()
-            right = _parse_and(tok)
-            left = OrExpr(left, right)
-        else:
-            break
-    return left
-
-
-def _parse_and(tok):
-    left = _parse_not(tok)
-    while True:
-        if tok.peek() and tok.peek().lower() == 'and':
-            tok.next()
-            right = _parse_not(tok)
-            left = AndExpr(left, right)
-        else:
-            break
-    return left
-
-
-def _parse_not(tok):
-    if tok.peek() and tok.peek().lower() == 'not':
-        tok.next()
-        expr = _parse_not(tok)
-        return NotExpr(expr)
-    return _parse_comparison(tok)
-
-
-def _parse_comparison(tok):
-    left = _parse_primary(tok)
-    if tok.peek() == '==':
-        tok.next()
-        right = _parse_primary(tok)
-        return EqualExpr(left, right)
-    return left
-
-
-def _parse_primary(tok):
-    t = tok.peek()
-    if t is None:
-        raise ParseError('Unexpected end of input')
-    if t == '(':
-        tok.next()
-        e = _parse_or(tok)
-        if tok.next() != ')':
-            raise ParseError('Expected )')
-        return e
-    # string literal
-    if t.startswith('"'):
-        tok.next()
-        # remove surrounding quotes and unescape
-        val = t[1:-1].replace('\"', '"')
-        return LiteralExpr(val, 'string')
-    # booleans
-    if t.lower() == 'true' or t.lower() == 'false':
-        tok.next()
-        return LiteralExpr(t.lower() == 'true', 'bool')
-    # number
-    if t.isdigit():
-        tok.next()
-        return LiteralExpr(int(t), 'int')
-    # identifier
-    if re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', t):
-        tok.next()
-        return VariableExpr(t)
-    raise ParseError(f'Unexpected token: {t}')
-
-# Helpers for semantic analysis
+# ---------------------------------------------------------------------------
+# Utilidades para el analisis semantico
+# ---------------------------------------------------------------------------
 
 def collect_vars(expr, out=None):
+    """Devuelve el conjunto de nombres de variables referenciadas en `expr`."""
     if out is None:
         out = set()
     if isinstance(expr, VariableExpr):
         out.add(expr.name)
-    elif isinstance(expr, LiteralExpr):
-        pass
     elif isinstance(expr, EqualExpr):
         collect_vars(expr.left, out)
         collect_vars(expr.right, out)
@@ -178,21 +119,64 @@ def collect_vars(expr, out=None):
         collect_vars(expr.expr, out)
     return out
 
-def infer_type(expr, symbol_table):
-    # returns 'bool' or type string for literals/vars
+
+def infer_type(expr, symbol_table, errors=None):
+    """Infiere el tipo de `expr` con la tabla de simbolos dada.
+
+    Devuelve 'bool' | 'int' | 'string' | None (tipo desconocido, p.ej. variable
+    no declarada) | 'type-error'.
+
+    Si se pasa una lista `errors`, se agregan mensajes detallados de cada
+    incompatibilidad encontrada (util para reportar mas de un error por
+    condicion).
+    """
+
+    def err(msg):
+        if errors is not None:
+            errors.append(msg)
+
     if isinstance(expr, LiteralExpr):
         return expr.type
+
     if isinstance(expr, VariableExpr):
-        return symbol_table.get(expr.name)
+        return symbol_table.get(expr.name)  # None si no esta declarada
+
     if isinstance(expr, EqualExpr):
-        lt = infer_type(expr.left, symbol_table)
-        rt = infer_type(expr.right, symbol_table)
+        lt = infer_type(expr.left, symbol_table, errors)
+        rt = infer_type(expr.right, symbol_table, errors)
         if lt is None or rt is None:
             return None
+        if "type-error" in (lt, rt):
+            return "type-error"
         if lt != rt:
-            return 'type-error'
-        return 'bool'
-    if isinstance(expr, (AndExpr, OrExpr, NotExpr)):
-        # boolean operators always produce bool
-        return 'bool'
+            err(f"no se puede comparar '{expr.left}' ({lt}) con '{expr.right}' ({rt})")
+            return "type-error"
+        return "bool"
+
+    if isinstance(expr, (AndExpr, OrExpr)):
+        op = "and" if isinstance(expr, AndExpr) else "or"
+        lt = infer_type(expr.left, symbol_table, errors)
+        rt = infer_type(expr.right, symbol_table, errors)
+        ok = True
+        for side, t in ((expr.left, lt), (expr.right, rt)):
+            if t not in ("bool", None, "type-error"):
+                err(f"operando de '{op}' debe ser bool, pero '{side}' es {t}")
+                ok = False
+        if lt is None or rt is None:
+            return None
+        if not ok or "type-error" in (lt, rt):
+            return "type-error"
+        return "bool"
+
+    if isinstance(expr, NotExpr):
+        t = infer_type(expr.expr, symbol_table, errors)
+        if t is None:
+            return None
+        if t == "type-error":
+            return "type-error"
+        if t != "bool":
+            err(f"operando de 'not' debe ser bool, pero '{expr.expr}' es {t}")
+            return "type-error"
+        return "bool"
+
     return None
