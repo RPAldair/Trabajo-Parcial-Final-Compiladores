@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="548" height="738" viewBox="0 0 548 738" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#546e7a"/></marker></defs>
+<rect width="100%" height="100%" fill="#fafafa"/>
+<text x="274" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#263238">workflow ticket_email</text>
+<path d="M 274 102 C 274 136, 274 152, 274 183" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 274 222 C 274 256, 210 272, 210 303" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="188" y="253" width="107" height="18" rx="4" fill="#ffffff" stroke="#546e7a" stroke-width="0.6" opacity="0.95"/>
+<text x="242" y="264" text-anchor="middle" font-size="12" font-style="italic" fill="#37474f">if email_soporte</text>
+<path d="M 274 222 C 274 256, 386 272, 386 303" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="258" y="253" width="144" height="18" rx="4" fill="#ffffff" stroke="#546e7a" stroke-width="0.6" opacity="0.95"/>
+<text x="330" y="264" text-anchor="middle" font-size="12" font-style="italic" fill="#37474f">if (not email_soporte)</text>
+<path d="M 210 342 C 210 376, 158 392, 158 423" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="127" y="373" width="113" height="18" rx="4" fill="#ffffff" stroke="#546e7a" stroke-width="0.6" opacity="0.95"/>
+<text x="184" y="384" text-anchor="middle" font-size="12" font-style="italic" fill="#37474f">if prioridad_alta</text>
+<path d="M 210 342 C 210 376, 390 392, 390 423" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="224" y="373" width="151" height="18" rx="4" fill="#ffffff" stroke="#546e7a" stroke-width="0.6" opacity="0.95"/>
+<text x="300" y="384" text-anchor="middle" font-size="12" font-style="italic" fill="#37474f">if (not prioridad_alta)</text>
+<path d="M 158 462 C 158 496, 274 512, 274 543" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 390 462 C 390 496, 274 512, 274 543" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 274 582 C 274 616, 274 632, 274 663" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 386 342 C 386 472, 274 536, 274 663" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="238" y="66" width="72" height="36" rx="18.0" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.8"/>
+<text x="274" y="88" text-anchor="middle" font-weight="600" fill="#1b5e20">start</text>
+<rect x="222" y="186" width="105" height="36" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+<text x="274" y="208" text-anchor="middle" font-weight="600" fill="#0d47a1">leer_email</text>
+<rect x="120" y="306" width="178" height="36" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+<text x="210" y="328" text-anchor="middle" font-weight="600" fill="#0d47a1">clasificar_prioridad</text>
+<rect x="344" y="306" width="83" height="36" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+<text x="386" y="328" text-anchor="middle" font-weight="600" fill="#0d47a1">ignorar</text>
+<rect x="66" y="426" width="185" height="36" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+<text x="158" y="448" text-anchor="middle" font-weight="600" fill="#0d47a1">asignar_agente_senior</text>
+<rect x="297" y="426" width="185" height="36" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+<text x="390" y="448" text-anchor="middle" font-weight="600" fill="#0d47a1">asignar_agente_junior</text>
+<rect x="196" y="546" width="156" height="36" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+<text x="274" y="568" text-anchor="middle" font-weight="600" fill="#0d47a1">notificar_cliente</text>
+<rect x="238" y="666" width="72" height="36" rx="18.0" fill="#ffebee" stroke="#c62828" stroke-width="1.8"/>
+<text x="274" y="688" text-anchor="middle" font-weight="600" fill="#b71c1c">end</text>
+</svg>

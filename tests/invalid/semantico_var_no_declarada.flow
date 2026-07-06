@@ -1,0 +1,5 @@
+// EXPECT: E304
+workflow demo {
+    start -> validar
+    validar -> end if stock_ok
+}

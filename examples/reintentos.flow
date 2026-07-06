@@ -1,0 +1,9 @@
+// Cubre ciclos (arista de retroceso) con salida hacia end
+workflow reintentos {
+    var exito : bool
+    start -> intentar
+    intentar -> confirmar if exito
+    intentar -> esperar if not exito
+    esperar -> intentar
+    confirmar -> end
+}

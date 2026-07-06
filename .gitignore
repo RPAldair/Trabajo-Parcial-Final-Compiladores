@@ -1,4 +1,5 @@
 __pycache__/
 *.pyc
-.venv/
-.vscode/
+output/
+tests/_tmp/
+.antlr/

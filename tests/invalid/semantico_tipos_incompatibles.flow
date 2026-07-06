@@ -1,0 +1,7 @@
+// EXPECT: E305
+workflow demo {
+    var edad : int
+    var pais : string
+    start -> validar
+    validar -> end if edad == pais
+}

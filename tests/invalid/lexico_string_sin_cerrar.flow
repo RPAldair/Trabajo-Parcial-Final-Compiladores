@@ -1,0 +1,6 @@
+// EXPECT: E101
+workflow demo {
+    var pais : string
+    start -> revisar
+    revisar -> end if pais == "PE
+}

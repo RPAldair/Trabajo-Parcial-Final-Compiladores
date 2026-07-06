@@ -1,0 +1,9 @@
+// EXPECT: E309
+workflow demo {
+    var ok : bool
+    start -> validar
+    validar -> end if ok
+    validar -> bucle_a if not ok
+    bucle_a -> bucle_b
+    bucle_b -> bucle_a
+}

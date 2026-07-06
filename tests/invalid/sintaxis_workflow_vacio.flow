@@ -1,0 +1,4 @@
+// EXPECT: E201
+workflow demo {
+    var a : bool
+}

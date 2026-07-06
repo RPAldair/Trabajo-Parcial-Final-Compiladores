@@ -1,21 +1,19 @@
-from antlr4 import *
+#!/usr/bin/env python3
+# driver.py
+# Driver simple conservado por compatibilidad con el Hito 1.
+# El punto de entrada principal del compilador es ahora flowc.py:
+#     python3 flowc.py check|json|script|llvm|svg|run|build <archivo.flow>
+import sys
+
+from antlr4 import FileStream, InputStream, CommonTokenStream
+
 from FlowLangLexer import FlowLangLexer
 from FlowLangParser import FlowLangParser
 from FlowLangCustomVisitor import FlowLangCustomVisitor
-from exprs import collect_vars, infer_type
-import re
+from errors import DiagnosticBag, CollectingLexerErrorListener, CollectingParserErrorListener
+from semantic import SemanticAnalyzer
 
-
-def main():
-    import sys
-    source_text = None
-    if len(sys.argv) > 1:
-        path = sys.argv[1]
-        input_stream = FileStream(path, encoding="utf-8")
-        with open(path, encoding='utf-8') as f:
-            source_text = f.read()
-    else:
-        input_stream = InputStream("""
+EJEMPLO = """
 workflow compra {
     var stock_ok : bool
     start -> validar
@@ -25,93 +23,55 @@ workflow compra {
     cancelar -> end
     enviar_email -> end
 }
-""")
-        source_text = input_stream.strdata
+"""
 
+
+def main():
+    if len(sys.argv) > 1:
+        input_stream = FileStream(sys.argv[1], encoding="utf-8")
+    else:
+        input_stream = InputStream(EJEMPLO)
+
+    bag = DiagnosticBag()
     lexer = FlowLangLexer(input_stream)
-    token_stream = CommonTokenStream(lexer)
-    parser = FlowLangParser(token_stream)
+    lexer.removeErrorListeners()
+    lexer.addErrorListener(CollectingLexerErrorListener(bag))
+    parser = FlowLangParser(CommonTokenStream(lexer))
+    parser.removeErrorListeners()
+    parser.addErrorListener(CollectingParserErrorListener(bag))
 
     tree = parser.root()
-
-    print("Árbol Sintáctico")
+    print("Arbol Sintactico")
     print(tree.toStringTree(recog=parser))
 
-    # Recorrido con el patrón Visitor para construir la representación de los workflows
-    visitor = FlowLangCustomVisitor()
-    workflows = visitor.visit(tree)
+    if bag.has_errors():
+        for d in bag:
+            print(d)
+        sys.exit(2)
+
+    workflows = FlowLangCustomVisitor().visit(tree)
+    SemanticAnalyzer(bag).analyze_program(workflows)
 
     print()
     print("Resumen de Workflows")
-    for workflow in workflows:
+    for wf in workflows:
         print()
-        print(f"workflow: {workflow.nombre}")
-        print(f"  estados ({len(workflow.estados)}): {', '.join(sorted(workflow.estados))}")
-        print(f"  transiciones ({len(workflow.transiciones)}):")
-        # las variables ya se recogen desde el Visitor (`workflow.variables`)
+        print(f"workflow: {wf.nombre}")
+        print(f"  variables ({len(wf.variables)}): "
+              + ", ".join(f"{n}:{t}" for n, t, _ in wf.variables))
+        print(f"  estados ({len(wf.estados)}): {', '.join(sorted(wf.estados))}")
+        print(f"  transiciones ({len(wf.transiciones)}):")
+        for t in wf.transiciones:
+            print(f"    {t}")
 
-        # construir tabla de símbolos
-        symtab = {name:typ for (name,typ) in getattr(workflow, 'variables', [])}
-
-        # validar variables duplicadas
-        names = [n for (n,_) in getattr(workflow, 'variables',[])]
-        dups = set([n for n in names if names.count(n) > 1])
-        for d in dups:
-            print(f"  ERROR: variable duplicada: {d}")
-
-        # procesar transiciones y condiciones
-        for transition in workflow.transiciones:
-            expr = transition.condicion
-            if expr is None:
-                print(f"    {transition}")
-                continue
-           
-            # comprobar variables usadas
-            used = collect_vars(expr)
-            for u in used:
-                if u not in symtab:
-                    print(f"  ERROR: variable usada sin declarar: {u} en workflow {workflow.nombre}")
-            # inferir tipo de la expresion
-            t = infer_type(expr, symtab)
-            if t == 'type-error':
-                print(f"  ERROR: incompatibilidad de tipos en condición: {expr}")
-            elif t is None:
-                print(f"  ERROR: tipo desconocido en condición: {expr}")
-
-            # show transition with parsed expr
-            print(f"    {transition.origen} -> {transition.destino} if {expr}")
-
-        # comprobaciones semánticas globales
-        estados = set(workflow.estados)
-        if 'start' not in estados:
-            print(f"  ERROR: falta estado 'start' en workflow {workflow.nombre}")
-        if 'end' not in estados:
-            print(f"  ERROR: falta estado 'end' en workflow {workflow.nombre}")
-
-        # detectar inalcanzables y sumideros
-        # construir grafo dirigido
-        graph = {s:set() for s in estados}
-        for t in workflow.transiciones:
-            graph.setdefault(t.origen, set()).add(t.destino)
-        # reachable from start
-        reachable = set()
-        if 'start' in estados:
-            stack = ['start']
-            while stack:
-                n = stack.pop()
-                if n in reachable: continue
-                reachable.add(n)
-                for m in graph.get(n,[]):
-                    if m not in reachable:
-                        stack.append(m)
-        unreachable = estados - reachable
-        for u in sorted(unreachable):
-            print(f"  WARNING: estado inalcanzable: {u}")
-        # sumideros: nodes with outdegree 0 that are not 'end'
-        for s, outs in graph.items():
-            if len(outs) == 0 and s != 'end':
-                print(f"  WARNING: estado sumidero (sin salidas): {s}")
+    print()
+    print("Diagnosticos")
+    if not bag.items:
+        print("  (sin diagnosticos)")
+    for d in bag:
+        print(f"  {d}")
+    sys.exit(2 if bag.has_errors() else 0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

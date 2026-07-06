@@ -1,0 +1,6 @@
+// EXPECT: E307
+workflow demo {
+    start -> validar
+    validar -> end
+    aislado -> end
+}

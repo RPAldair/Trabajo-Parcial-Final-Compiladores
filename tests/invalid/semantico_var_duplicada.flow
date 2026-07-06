@@ -1,0 +1,7 @@
+// EXPECT: E303
+workflow demo {
+    var ok : bool
+    var ok : int
+    start -> validar
+    validar -> end if ok
+}

@@ -1,0 +1,7 @@
+// EXPECT: E308
+workflow demo {
+    var ok : bool
+    start -> validar
+    validar -> colgado if ok
+    validar -> end if not ok
+}

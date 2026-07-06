@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#455a64"/>
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#fafafa"/>
+  <text x="480" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#263238">Arquitectura del compilador FlowLang</text>
+
+  <!-- ===================== FRONTEND ===================== -->
+  <rect x="30" y="60" width="900" height="150" rx="10" fill="#eceff1" stroke="#90a4ae" stroke-dasharray="6 4"/>
+  <text x="48" y="84" font-size="13" font-weight="bold" fill="#546e7a">FRONTEND (ANTLR4)</text>
+
+  <!-- fuente -->
+  <rect x="50" y="110" width="120" height="52" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="1.8"/>
+  <text x="110" y="132" text-anchor="middle" font-size="13" font-weight="600" fill="#795548">fuente</text>
+  <text x="110" y="149" text-anchor="middle" font-size="12" font-style="italic" fill="#795548">programa.flow</text>
+
+  <!-- lexer -->
+  <rect x="215" y="110" width="130" height="52" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+  <text x="280" y="132" text-anchor="middle" font-size="13" font-weight="600" fill="#0d47a1">Lexer</text>
+  <text x="280" y="149" text-anchor="middle" font-size="11" fill="#0d47a1">FlowLangLexer</text>
+
+  <!-- parser -->
+  <rect x="390" y="110" width="130" height="52" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+  <text x="455" y="132" text-anchor="middle" font-size="13" font-weight="600" fill="#0d47a1">Parser</text>
+  <text x="455" y="149" text-anchor="middle" font-size="11" fill="#0d47a1">FlowLangParser</text>
+
+  <!-- visitor -->
+  <rect x="565" y="110" width="150" height="52" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+  <text x="640" y="132" text-anchor="middle" font-size="13" font-weight="600" fill="#0d47a1">Visitor (AST)</text>
+  <text x="640" y="149" text-anchor="middle" font-size="11" fill="#0d47a1">CustomVisitor</text>
+
+  <!-- IR -->
+  <rect x="760" y="110" width="150" height="52" rx="6" fill="#ede7f6" stroke="#5e35b1" stroke-width="1.8"/>
+  <text x="835" y="132" text-anchor="middle" font-size="13" font-weight="600" fill="#4527a0">IR: Workflow</text>
+  <text x="835" y="149" text-anchor="middle" font-size="11" fill="#4527a0">model.py + exprs.py</text>
+
+  <path d="M 170 136 L 211 136" fill="none" stroke="#455a64" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="191" y="128" text-anchor="middle" font-size="10" fill="#546e7a">chars</text>
+  <path d="M 345 136 L 386 136" fill="none" stroke="#455a64" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="366" y="128" text-anchor="middle" font-size="10" fill="#546e7a">tokens</text>
+  <path d="M 520 136 L 561 136" fill="none" stroke="#455a64" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="541" y="128" text-anchor="middle" font-size="10" fill="#546e7a">árbol</text>
+  <path d="M 715 136 L 756 136" fill="none" stroke="#455a64" stroke-width="1.8" marker-end="url(#arr)"/>
+
+  <!-- errores E101 / E201 -->
+  <text x="280" y="180" text-anchor="middle" font-size="10.5" fill="#c62828">E101 léxicos</text>
+  <text x="455" y="180" text-anchor="middle" font-size="10.5" fill="#c62828">E201 sintácticos</text>
+
+  <!-- ===================== SEMANTICO ===================== -->
+  <rect x="30" y="240" width="900" height="110" rx="10" fill="#eceff1" stroke="#90a4ae" stroke-dasharray="6 4"/>
+  <text x="48" y="264" font-size="13" font-weight="bold" fill="#546e7a">ANÁLISIS SEMÁNTICO</text>
+
+  <rect x="240" y="278" width="220" height="52" rx="6" fill="#fff3e0" stroke="#e65100" stroke-width="1.8"/>
+  <text x="350" y="300" text-anchor="middle" font-size="13" font-weight="600" fill="#bf360c">SemanticAnalyzer</text>
+  <text x="350" y="317" text-anchor="middle" font-size="11" fill="#bf360c">tabla de símbolos + tipos + grafo</text>
+
+  <rect x="530" y="278" width="200" height="52" rx="6" fill="#ede7f6" stroke="#5e35b1" stroke-width="1.8"/>
+  <text x="630" y="300" text-anchor="middle" font-size="13" font-weight="600" fill="#4527a0">IR validada</text>
+  <text x="630" y="317" text-anchor="middle" font-size="11" fill="#4527a0">DFA con guardas verificado</text>
+
+  <path d="M 835 162 C 835 220, 350 220, 350 274" fill="none" stroke="#455a64" stroke-width="1.8" marker-end="url(#arr)"/>
+  <path d="M 460 304 L 526 304" fill="none" stroke="#455a64" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="350" y="348" text-anchor="middle" font-size="10.5" fill="#c62828">E301–E309 / W301–W303</text>
+
+  <!-- ===================== BACKENDS ===================== -->
+  <rect x="30" y="380" width="900" height="160" rx="10" fill="#eceff1" stroke="#90a4ae" stroke-dasharray="6 4"/>
+  <text x="48" y="404" font-size="13" font-weight="bold" fill="#546e7a">BACKENDS (codegen/)</text>
+
+  <rect x="60" y="420" width="190" height="56" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="155" y="443" text-anchor="middle" font-size="13" font-weight="600" fill="#1b5e20">json_backend</text>
+  <text x="155" y="460" text-anchor="middle" font-size="11" fill="#1b5e20">spec .json de automatización</text>
+
+  <rect x="285" y="420" width="190" height="56" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="380" y="443" text-anchor="middle" font-size="13" font-weight="600" fill="#1b5e20">python_backend</text>
+  <text x="380" y="460" text-anchor="middle" font-size="11" fill="#1b5e20">script .py autónomo</text>
+
+  <rect x="510" y="420" width="190" height="56" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="605" y="443" text-anchor="middle" font-size="13" font-weight="600" fill="#1b5e20">llvm_backend</text>
+  <text x="605" y="460" text-anchor="middle" font-size="11" fill="#1b5e20">.ll: bloques básicos + saltos</text>
+
+  <rect x="735" y="420" width="180" height="56" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="825" y="443" text-anchor="middle" font-size="13" font-weight="600" fill="#1b5e20">svg_backend</text>
+  <text x="825" y="460" text-anchor="middle" font-size="11" fill="#1b5e20">diagrama .svg del flujo</text>
+
+  <path d="M 630 330 C 630 360, 155 380, 155 416" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arr)"/>
+  <path d="M 630 330 C 630 360, 380 384, 380 416" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arr)"/>
+  <path d="M 630 330 L 606 416" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arr)"/>
+  <path d="M 630 330 C 630 360, 825 380, 825 416" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arr)"/>
+
+  <!-- destinos -->
+  <text x="155" y="500" text-anchor="middle" font-size="11" font-style="italic" fill="#546e7a">motor de automatización</text>
+  <text x="380" y="500" text-anchor="middle" font-size="11" font-style="italic" fill="#546e7a">ejecución directa (hook accion)</text>
+  <text x="605" y="500" text-anchor="middle" font-size="11" font-style="italic" fill="#546e7a">verificación + JIT (llvmlite)</text>
+  <text x="825" y="500" text-anchor="middle" font-size="11" font-style="italic" fill="#546e7a">documentación / informes</text>
+
+  <!-- validacion cruzada -->
+  <rect x="60" y="560" width="855" height="56" rx="8" fill="#fce4ec" stroke="#ad1457" stroke-width="1.6"/>
+  <text x="487" y="583" text-anchor="middle" font-size="12.5" font-weight="600" fill="#880e4f">Plan de validación: intérprete de referencia  vs  script Python generado  vs  código máquina (LLVM MCJIT)</text>
+  <text x="487" y="602" text-anchor="middle" font-size="11.5" fill="#880e4f">→ trazas idénticas en todos los contextos de prueba = los backends preservan la semántica (tests/run_tests.py)</text>
+</svg>

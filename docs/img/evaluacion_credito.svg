@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="351" height="618" viewBox="0 0 351 618" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#546e7a"/></marker></defs>
+<rect width="100%" height="100%" fill="#fafafa"/>
+<text x="176" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#263238">workflow evaluacion_credito</text>
+<path d="M 176 102 C 176 136, 176 152, 176 183" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 176 222 C 176 256, 108 272, 108 303" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="-39" y="253" width="361" height="18" rx="4" fill="#ffffff" stroke="#546e7a" stroke-width="0.6" opacity="0.95"/>
+<text x="142" y="264" text-anchor="middle" font-size="12" font-style="italic" fill="#37474f">if (((edad == 18) and (pais == &quot;PE&quot;)) or aprobado_manual)</text>
+<path d="M 176 222 C 176 256, 240 272, 240 303" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="129" y="253" width="157" height="18" rx="4" fill="#ffffff" stroke="#546e7a" stroke-width="0.6" opacity="0.95"/>
+<text x="208" y="264" text-anchor="middle" font-size="12" font-style="italic" fill="#37474f">if (not aprobado_manual)</text>
+<path d="M 176 222 C 176 256, 108 272, 108 303" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 108 342 C 108 376, 176 392, 176 423" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 240 342 C 240 376, 176 392, 176 423" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 176 462 C 176 496, 176 512, 176 543" fill="none" stroke="#546e7a" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="140" y="66" width="72" height="36" rx="18.0" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.8"/>
+<text x="176" y="88" text-anchor="middle" font-weight="600" fill="#1b5e20">start</text>
+<rect x="134" y="186" width="83" height="36" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+<text x="176" y="208" text-anchor="middle" font-weight="600" fill="#0d47a1">revisar</text>
+<rect x="66" y="306" width="83" height="36" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+<text x="108" y="328" text-anchor="middle" font-weight="600" fill="#0d47a1">aprobar</text>
+<rect x="195" y="306" width="90" height="36" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+<text x="240" y="328" text-anchor="middle" font-weight="600" fill="#0d47a1">rechazar</text>
+<rect x="127" y="426" width="97" height="36" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+<text x="176" y="448" text-anchor="middle" font-weight="600" fill="#0d47a1">notificar</text>
+<rect x="140" y="546" width="72" height="36" rx="18.0" fill="#ffebee" stroke="#c62828" stroke-width="1.8"/>
+<text x="176" y="568" text-anchor="middle" font-weight="600" fill="#b71c1c">end</text>
+</svg>
